@@ -1,15 +1,15 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Blake Watson
 // 
-// Create Date: 07/22/2025 06:08:03 PM
+// Create Date: 07/21/2025 06:19:17 PM
 // Design Name: 
 // Module Name: ShiftRegister
-// Project Name: 
-// Target Devices: 
+// Project Name: Mini_SPI
+// Target Devices: xc7a35tftg256-1  ( Alchitry AU / Artix-7 )
 // Tool Versions: 
-// Description: 
+// Description: Very basic D Flip-Flop and shift register modules, for use in IO.v
 // 
 // Dependencies: 
 // 

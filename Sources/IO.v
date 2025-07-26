@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Blake Watson
 // 
 // Create Date: 07/21/2025 06:20:40 PM
 // Design Name: 
 // Module Name: IO
-// Project Name: 
-// Target Devices: 
+// Project Name: Mini_SPI
+// Target Devices: xc7a35tftg256-1 ( Alchitry AU / Artix-7 )
 // Tool Versions: 
 // Description: 
 // 
@@ -20,51 +20,44 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Mux2_1 (sig0, sig1, select, sigOut);
-    input sig0, sig1, select;
-    output sigOut;
-    assign sigOut = select ? sig1 : sig0;
-endmodule
 
+module IO(sclk, cs, miso, mosi, buffer, bufferOut);
 
-
-module BCD (num, digits);
-    input [2:0] num;
-    output [7:0] digits;
-    
-    assign digits[0] = ~num[2] & ~num[1] & ~num[0];
-    assign digits[1] = ~num[2] & ~num[1] & num[0];
-    assign digits[2] = ~num[2] & num[1] & ~num[0];
-    assign digits[3] = ~num[2] & num[1] & num[0];
-    assign digits[4] = num[2] & ~num[1] & ~num[0];
-    assign digits[5] = num[2] & ~num[1] & num[0];
-    assign digits[6] = num[2] & num[1] & ~num[0];
-    assign digits[7] = num[2] & num[1] & num[0];
-endmodule
-
-
-module IO(sclk, cs, mosi, buffer);
     input sclk, cs, mosi;
-    output [7:0] buffer;
+    input [15:0] bufferOut;
+    output miso;
+    output [15:0] buffer;
 
-    reg [2:0] counter = 3'b000;
-    wire shift;
-    wire clear;
+    reg misoReg;
+    assign miso = misoReg;
     
-    assign clear = 1'b1;
-    assign shift = 1'b0;
-        
-    ShiftRegister #8 sr (shift, mosi, sclk, clear, buffer);
+    reg [7:0] counter = 8'd0;
+    wire shift = (counter>15) ? 1'b1 : 1'b0;
+    wire clear = ~cs;
+   
 
+    ShiftRegister #16 sr (shift, mosi, sclk, clear, buffer);
+
+       
     always @(posedge sclk) begin
-        if(cs==0) begin     
-            if( counter == 3'd7 ) begin  // i feel like this should be a 16, not a 15...
-                counter = 3'b000;
+        if(cs==0) begin
+            if( counter == 8'd31 ) begin
+                counter = 8'd0;
             end
             else begin
                 counter = counter + 1'b1;
             end
         end
     end
+    
 
+    always @(negedge sclk) begin
+        if(cs==0) begin
+            if(counter>15) begin
+                misoReg = bufferOut[31-counter];  // was counter - 16.  doing it this was to reverse the endianness
+            end
+        end
+    end
+    
+    
 endmodule
