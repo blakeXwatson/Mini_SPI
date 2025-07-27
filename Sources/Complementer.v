@@ -9,7 +9,7 @@
 // Project Name: Mini_SPI
 // Target Devices: xc7a35tftg256-1  ( Alchitry AU / Artix-7 )
 // Tool Versions: 
-// Description: 1's and 2's complement modules.  Only used to drive sample output for the Arduino SPI test driver
+// Description: 1's and 2's complement modules and an incrementer.  Only used to drive sample output for the Arduino SPI test driver
 // 
 // Dependencies: 
 // 
@@ -18,6 +18,42 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
+
+
+
+module IncrementerN #(parameter n=4) (a, s, cOut);
+    // incrementer module.  n must be greater than 1
+
+    input [n-1:0] a;
+    output [n-1:0] s;
+    output cOut;    
+
+    wire [n-2:0] ands; 
+
+    assign s[0] = ~a[0];
+    assign s[1] = a[1] ^ a[0];
+    assign ands[0] =  a[1] & a[0]; // ands[0] = and of first 2 bits
+    assign cOut = ands[n-2];
+
+    genvar i;
+
+    // ands[1] = a[2] & a[1] & a[0], etc...
+    generate
+        for(i=1; i<n-1; i=i+1)
+            begin: ands_cumulative
+                assign ands[i] = a[i+1] & ands[i-1];
+            end
+    endgenerate
+    
+    generate
+        for(i=2; i<n; i=i+1)
+            begin: inc
+                assign s[i] = a[i] ^  ands[i-2];
+            end
+    endgenerate
+
+endmodule
+
 
 
 module Comp1s #(parameter n=4) (d, c);
@@ -36,7 +72,7 @@ module Comp1s #(parameter n=4) (d, c);
 endmodule
 
 
-// this doesn't do anything with the sign, it simply complements the data in front of it
+
 module ComplementerN #(parameter n=4) (d, c);
     input [n-1:0] d;
     output [n-1:0]c ;
