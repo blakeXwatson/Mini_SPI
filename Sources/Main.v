@@ -27,10 +27,10 @@ module Main(clk, sclk, cs, miso, mosi, led);
     wire [15:0] data;
     wire [15:0] dataComplemented;
     
-    IO spi (sclk, cs, miso,  mosi, data, dataComplemented);
+    IO #( 16, 16 ) spi ( sclk, cs, miso, mosi, data, dataComplemented );
     
     assign led[7:0] = data[7:0];
+    
     ComplementerN #16 invert (data, dataComplemented);
     
-
 endmodule

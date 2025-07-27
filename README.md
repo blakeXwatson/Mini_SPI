@@ -21,7 +21,8 @@ Sources/<br>
 
 
 Simulation/<br>
-  * Testbenches for the DFF and ShiftRegister modules can be found here.<br><br>
+  * Testbenches for the IO and ShiftRegister modules can be found here.<br><br>
+    - IO_Sim.v
     - ShiftRegister_Sim.v
 <br>
 <br>
