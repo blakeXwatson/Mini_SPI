@@ -21,27 +21,27 @@
 
 
 
-module IO(sclk, cs, miso, mosi, buffer, bufferOut);
+module IO #(parameter lenIn=16, parameter lenOut=16) (sclk, cs, miso, mosi, buffer, bufferOut);
 
     input sclk, cs, mosi;
-    input [15:0] bufferOut;
+    input [lenOut-1:0] bufferOut;
     output miso;
-    output [15:0] buffer;
+    output [lenIn-1:0] buffer;
 
     reg misoReg;
     assign miso = misoReg;
     
     reg [7:0] counter = 8'd0;
-    wire shift = (counter>15) ? 1'b1 : 1'b0;
+    wire shift = ( counter > ( lenIn - 1 ) ) ? 1'b1 : 1'b0;
     wire clear = ~cs;
    
 
-    ShiftRegister #16 sr (shift, mosi, sclk, clear, buffer);
+    ShiftRegister #lenIn sr (shift, mosi, sclk, clear, buffer);
 
        
     always @(posedge sclk) begin
         if(cs==0) begin
-            if( counter == 8'd31 ) begin
+            if( counter == (lenIn + lenOut) -1 ) begin
                 counter = 8'd0;
             end
             else begin
@@ -50,11 +50,10 @@ module IO(sclk, cs, miso, mosi, buffer, bufferOut);
         end
     end
     
-
     always @(negedge sclk) begin
-        if(cs==0) begin
-            if(counter>15) begin
-                misoReg = bufferOut[31-counter];  // was counter - 16.  doing it this was to reverse the endianness
+        if( cs == 0 ) begin
+            if( counter > ( lenIn - 1 ) ) begin
+                misoReg = bufferOut[ ( ( lenIn + lenOut ) -1 ) - counter ];  // was counter - 16.  doing it this was to reverse the endianness
             end
         end
     end
