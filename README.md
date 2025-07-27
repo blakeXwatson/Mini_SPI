@@ -15,7 +15,7 @@ Sources/<br>
     - Main.v            - Driver for an actual device.  Operates on the data in to produce some output to return.  Also drives the LEDs
     - IO.v              - Contains the main SPI servant module.  Shifts data in and sends data out
     - Complementer.v    - Complements the data inbound to produce the sample output.
-    - ShiftRegister.v   - Contains D Flip-Flip module and a generic ShiftRegister module built on that.  Used to hold data in from the SPI master
+    - ShiftRegister.v   - Contains a generic ShiftRegister module built on that.  Used to hold data in from the SPI master
 <br>
 <br>
 
