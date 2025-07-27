@@ -31,8 +31,6 @@ module Main(clk, sclk, cs, miso, mosi, led);
     
     assign led[7:0] = data[7:0];
     ComplementerN #16 invert (data, dataComplemented);
-    //assign dataComplemented = ( data >> 1 ) ;
-    
     
 
 endmodule
