@@ -39,27 +39,3 @@ module ShiftRegister #(parameter n=8) (shift, serialIn, clk, clear, q);
     end
 
 endmodule
-
-
-module DFF (clear, d, clk, q);
-	input clear, d, clk;
-	output q;
-    reg qR;
-
-    assign q = qR;
-
-    always @(d, clk) begin
-
-        if(clk==1'b0) begin
-        
-            if(clear==1'b1) begin
-                qR = d;
-            end
-            else begin
-                qR = 1'b0;
-            end
-            
-        end
-    end
-
-endmodule

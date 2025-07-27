@@ -53,7 +53,7 @@ uint16_t writeReadData(uint16_t output){
 }
 
 
-// to be overridden/modified as needed.  this is where you look at everything and figure out if the data you received is what you expected
+// To be overridden/modified as needed.  This is where you look at everything and figure out if the data you received is what you expected
 bool testResult( uint16_t dataOut, uint16_t dataIn ){
   
   int16_t dataOutI = ( int16_t ) dataOut;
@@ -63,7 +63,7 @@ bool testResult( uint16_t dataOut, uint16_t dataIn ){
   if( dataInI == expected )
     return true;
 
-  //else...
+  // Else...
   Serial.printf( "mismatch.  result %d  does not match input  %d\n", dataOutI, dataInI );
   Serial.printf( "expected  %d\n\n", expected );
   return false;
