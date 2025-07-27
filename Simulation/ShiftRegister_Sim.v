@@ -21,26 +21,14 @@
 
 
 module ShiftRegister_Sim( );
-    reg clk;
-    reg preset = 1'b0;
+    reg clk, shift, serialIn;
     reg clear = 1'b1;
     reg d = 1'b0;
-    wire qFF;
     wire [7:0] qSR;
 
-    reg shift, serialIn;
     
     integer counter = 0;
     
-    
-    // module Servant( cs, sclk, miso, mosi, dataOut, dataIn );
-    DFF ff (
-        .clear (clear),
-        .d (d),
-        .clk (clk),
-        .q (qFF)        
-    );
-     
 
     // module ShiftRegister(shift, serialIn, clk, clear, parallelIn, q);
     ShiftRegister #8 sr (
