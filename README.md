@@ -17,7 +17,7 @@ Sources/
 
 
 Simulation/
-  * Testbenches for each of the modules can be found in here.
+  * Testbenches for the DFF and ShiftRegister modules can be found here.
 
 Constraints/
   * The constraints file for my particular device, and Artix-7 on an Alchitry AU dev board is in here
